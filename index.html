@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Tress </title>
+	<title>Learn Hive </title>
 
 	<!-- Meta Tags -->
 	<meta charset="utf-8">
@@ -18,6 +18,43 @@
 
 	<!-- Theme CSS -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Heebo:wght@700&display=swap" rel="stylesheet">
+
+	<style>
+		.form-select {
+			padding: 0.75rem;
+			border: 1px solid #dde0e3;
+			border-radius: 0.325rem;
+			background-color: #fff;
+			color: #747579;
+			font-size: 0.9375rem;
+			transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+		}
+
+		.form-select:focus {
+			border-color: #066ac9;
+			outline: 0;
+			box-shadow: 0 0 0 0.25rem rgba(6, 106, 201, 0.25);
+		}
+
+		.input-group {
+			position: relative;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: stretch;
+			width: 100%;
+		}
+
+		.input-borderless {
+			border-radius: 0.325rem;
+		}
+
+		@media (max-width: 768px) {
+			.col-md-4 {
+				margin-bottom: 1rem;
+			}
+		}
+	</style>
 
 </head>
 
@@ -30,7 +67,7 @@
 			<div class="container">
 				<!-- Logo START -->
 				<a class="navbar-brand" href="index.html">
-					<h2>Treson Lessons</h2>
+					<h2>Learn Hive</h2>
 				</a>
 				<!-- Logo END -->
 
@@ -84,17 +121,36 @@
 				<div class="row">
 
 					<!-- Main content START -->
-					<div class="col-lg-8 col-xl-9">
+					<div class="col-12">
 
 						<!-- Search option START -->
 						<div class="row mb-4 align-items-center">
-							<!-- Search bar -->
 							<div class="col-xl-12">
 								<form class="border rounded p-2">
-									<div class="input-group input-borderless">
-										<input type="text" v-model="searchQuery" placeholder="Search for products..."
-											class="form-control me-1" />
-
+									<div class="row g-2 align-items-center">
+										<!-- Sort Dropdown -->
+										<div class="col-md-4">
+											<select class="form-select" v-model="sortCriteria" @change="handleSortChange">
+												<optgroup label="Ascending">
+													<option value="title-asc">Subject (Ascending)</option>
+													<option value="location-asc">Location (Ascending)</option>
+													<option value="price-asc">Price (Ascending)</option>
+													<option value="spaces-asc">Availability (Ascending)</option>
+												</optgroup>
+												<optgroup label="Descending">
+													<option value="title-desc">Subject (Descending)</option>
+													<option value="location-desc">Location (Descending)</option>
+													<option value="price-desc">Price (Descending)</option>
+													<option value="spaces-desc">Availability (Descending)</option>
+												</optgroup>
+											</select>
+										</div>
+										<!-- Search Input -->
+										<div class="col-md-8">
+											<div class="input-group input-borderless">
+												<input type="text" v-model="searchQuery" placeholder="Search for products..." class="form-control me-1" />
+											</div>
+										</div>
 									</div>
 								</form>
 							</div>
@@ -168,60 +224,6 @@
 
 					</div>
 					<!-- Main content END -->
-					<!-- Right sidebar START -->
-					<div class="col-lg-4 col-xl-3">
-						<!-- Responsive offcanvas body START -->
-						<div class="offcanvas-lg offcanvas-end" tabindex="-1" id="offcanvasSidebar">
-							<div class="offcanvas-header bg-light">
-								<h5 class="offcanvas-title" id="offcanvasNavbarLabel">Advance Filter</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasSidebar"
-									aria-label="Close"></button>
-							</div>
-							<div class=" p-3 p-lg-0">
-								<form>
-									<!-- Category START -->
-									<div class="card card-body shadow p-4 mb-4">
-										<!-- Title -->
-										<h4 class="mb-3">Sort Options</h4>
-										<!-- Category group -->
-										<div class="col-1	2">
-											<!-- Sorting Criteria Radios -->
-											<div v-for="(option, index) in sortOptions" :key="index"
-												class="d-flex justify-content-between align-items-center">
-												<div class="form-check">
-													<input class="form-check-input" type="radio" name="sortby" :id="'sortOption' + index"
-														v-model="sortBy" :value="option.value">
-													<label class="form-check-label" :for="'sortOption' + index">{{
-														option.label }}</label>
-												</div>
-											</div>
-
-											<!-- Sort Order Radios -->
-											<div class="d-flex justify-content-between align-items-center">
-												<div class="form-check">
-													<input class="form-check-input" type="radio" name="order" id="ascending" v-model="sortOrder"
-														value="asc">
-													<label class="form-check-label" for="ascending">Ascending</label>
-												</div>
-											</div>
-											<div class="d-flex justify-content-between align-items-center">
-												<div class="form-check">
-													<input class="form-check-input" type="radio" name="order" id="descending" v-model="sortOrder"
-														value="desc">
-													<label class="form-check-label" for="descending">Descending</label>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- Category END -->
-								</form><!-- Form End -->
-							</div>
-
-						</div>
-						<!-- Responsive offcanvas body END -->
-					</div>
-					<!-- Right sidebar END -->
-
 
 				</div><!-- Row END -->
 			</div>
@@ -266,20 +268,17 @@
 							<!-- Form START -->
 							<form class="row g-3 mt-0">
 								<!-- Name -->
-								<div class="col-md-6 bg-light-input">
+								<div class="col-md-12 bg-light-input">
 									<label for="yourName" class="form-label">Name *</label>
 									<input type="text" class="form-control" id="yourName" v-model="formData.name" placeholder="Name"
 										@input="preventSpaces">
 								</div>
-								<!-- Email -->
-
 								<!-- Mobile number -->
-								<div class="col-md-6 bg-light-input">
+								<div class="col-md-12 bg-light-input">
 									<label for="mobileNumber" class="form-label">Mobile number *</label>
 									<input type="number" class="form-control" id="mobileNumber" v-model="formData.mobile"
 										placeholder="Mobile number">
 								</div>
-
 							</form>
 							<!-- Form END -->
 
@@ -387,7 +386,8 @@
 					mobile: 0,
 
 				},
-				formIsValid: false // Track form validity
+				formIsValid: false, // Track form validity
+				sortCriteria: 'title-asc' // default sort
 			};
 		},
 		methods: {
@@ -474,6 +474,11 @@
 			},
 			preventSpaces(event) {
 				this.formData.name = event.target.value.replace(/\s+/g, ''); // Remove spaces
+			},
+			handleSortChange(event) {
+				const [field, order] = event.target.value.split('-');
+				this.sortBy = field;
+				this.sortOrder = order;
 			},
 		},
 		computed: {
